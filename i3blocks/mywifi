@@ -1,0 +1,6 @@
+#!/bin/bash
+#echo "$(iw dev wlp3s0 link | grep signal | cut -d " " -f 2-)"
+QUALITY=$(grep $INTERFACE /proc/net/wireless | awk '{ print int($3 * 100 / 70)
+}')
+
+echo $QUALITY%

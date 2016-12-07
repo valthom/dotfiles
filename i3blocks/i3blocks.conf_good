@@ -1,0 +1,99 @@
+separator_block_width=14
+
+#[mail]
+#label= 
+#command=~/.i3/.mail.sh.x
+#interval=100
+#color=#7F00FF 
+
+[focused_window]
+command=sleep .3; xdotool getactivewindow getwindowname
+align=center
+interval=repeat
+color=#C5C8C6  #white
+
+[separator]
+
+
+[disk-root]
+label=:
+command=/usr/lib/i3blocks/disk /
+interval=300
+color=#1793D1
+color=#C5C8C6  #white
+
+
+#[disk-home]
+#label=:
+#command=/usr/lib/i3blocks/disk $HOME
+#interval=30
+#color=#859900
+
+[ssid]
+label=
+command=echo "$(iwconfig | grep SSID | cut -d '"' -s -f2 )"
+#command=mywifi
+color=#d33682
+color=#C5C8C6  #white
+interval=5
+
+
+#[wireless]
+#instance=wlp3s0
+#command=/usr/lib/i3blocks/iface
+#color=#00FF00
+#interval=10
+
+[strength]
+#command=./wifi #echo "$(iw dev wlp3s0 link | grep signal | cut -d " " -f 2-)"
+#interval=1
+#color=#cb4b16
+#color=#C5C8C6  #white
+#
+[temp]
+label=
+command=echo "$(sensors coretemp-isa-0000 | awk '/Physical/ {print $4}')"
+interval=10
+color=#b58900
+color=#C5C8C6  #white
+
+[battery]
+command=/usr/lib/i3blocks/battery
+color=#C5C8C6  #white
+interval=30
+
+[cpu]
+label= 
+command=perl /usr/lib/i3blocks/cpu_usage
+interval=5
+signal=1
+
+[memory]
+command=/usr/lib/i3blocks/memory
+interval=5
+color=#6c71c4
+color=#C5C8C6  #white
+
+#[load]
+#label=
+#command=/usr/lib/i3blocks/load_average
+#interval=10
+#color=#6c71c4
+#color=#C5C8C6  #white
+#
+
+[volume]
+label=
+command=/usr/lib/i3blocks/volume
+interval=5
+signal=10
+color=#d70a53
+color=#C5C8C6  #white
+
+
+[time]
+label=
+command=date '+%a %m-%d-%y  %k:%M'
+interval=30
+color=#50C878
+color=#C5C8C6  #white
