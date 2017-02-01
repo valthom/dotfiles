@@ -1,7 +1,10 @@
 set t_Co=256
+" let &t_AB="\e[48;5;%dm"
+" let &t_AF="\e[38;5;%dm""]"
+"]"
 "imap <buffer> <M>it <Plug>Tex_InsertItemOnThisLine
 " Vim doesn't like fish
-set shell=/bin/bash
+set shell=/bin/zsh
 " Vundle config
 set nocompatible
 filetype off
@@ -13,13 +16,16 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
+Plugin 'sjl/gundo.vim'
 
 " Other plugins
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vimwiki/vimwiki'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'godlygeek/csapprox'
 "Plugin 'editorconfig/editorconfig-vim'
 "Plugin 'vim-scripts/opencl.vim'
 "Plugin 'kchmck/vim-coffee-script'
@@ -39,12 +45,15 @@ Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'altercation/vim-colors-solarized'
 Plugin 'chriskempson/vim-tomorrow-theme'
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'chriskempson/base16-vim'
+Plugin 'baskerville/bubblegum'
 " Plugin 'w0ng/vim-hybrid'
 Plugin 'morhetz/gruvbox'
 Plugin 'Lokaltog/vim-distinguished'
 " Plugin 'tomasr/molokai'
 
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Shougo/neocomplete.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'lervag/vimtex'
@@ -58,11 +67,24 @@ Plugin 'christoomey/vim-sort-motion' "ga movement to sort lines
 Plugin 'vim-scripts/ReplaceWithRegister' "gr. eg griw replace current word with default regster
 Plugin 'wellle/targets.vim' "add various text objects \", (, ', $ in commands
 
-call vundle#end()			 " required
+" Plugin 'MarcWeber/vim-addon-mw-utils'
+" Plugin 'tomtom/tlib_vim'
+" Plugin 'garbas/vim-snipmate'
+"
+" " Optional:
+" Plugin 'honza/vim-snippets'
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
+
+call vundle#end()            " required
 
 " Rule for YCM
 " Apply YCM FixIt
-map <F9> :YcmCompleter FixIt<CR>
+"map <F9> :YcmCompleter FixIt<CR>
 "let g:ycm_auto_trigger = 1
 
 " General editor options
@@ -87,9 +109,10 @@ set nosmartindent
 
 set hlsearch
 set incsearch       " While typing a search command, show immediately where the
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:ycm_autoclose_preview_window_after_insertion = 1 "Not working ??
+
 "let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1 "Not working ??
 " Enable spell checking
 "set spell
 "set spelllang=en_gb
@@ -118,7 +141,7 @@ nnoremap <S-Tab> :bprevious <CR>
 " nnoremap j gj
 " nnoremap k gk
 
-imap jj <Esc>
+imap jk <Esc>
 nnoremap gb :ls<CR>:b<Space>
 
 
@@ -132,28 +155,35 @@ filetype indent on
 
 let python_highlight_all=1
 " Enable syntax highlighting and set an appropriate colour-scheme
-syntax on
 "colorscheme solarized
 set background=dark
+syntax on
+" hi StatusLine    guibg=#313633 guifg=#ccdc90
+" hi StatusLineNC    guibg=#2e3330 guifg=#88b090
+" hi StatusLine    ctermbg=236   ctermfg=186
+" hi StatusLineNC    ctermbg=235     ctermfg=108
 " colorscheme Tomorrow-Night-Bright
 " colorscheme Tomorrow-Night-Eighties
 colorscheme gruvbox
+"highlight Special ctermfg=Black
+"highlight nonText ctermfg=White
+highlight Normal ctermbg=None
+
 set laststatus=2
 let g:airline_theme='gruvbox'
+let g:airline_theme='bubblegum'
+
 let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '░'
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '░'
 " Disable powerline arrows and setting blank seperators creates a rectangular box
-let g:airline_left_sep = '█▓░'
-let g:airline_right_sep = '░▓█'
+" let g:airline_left_sep = '█▓░'
+" let g:airline_right_sep = '░▓█'
 
 " I like these colours for the status bar rather than the zenburn ones. They
 " are just the default but with fg and bg reversed.
-" hi StatusLine	   guibg=#313633 guifg=#ccdc90
-" hi StatusLineNC    guibg=#2e3330 guifg=#88b090
-" hi StatusLine	   ctermbg=236	 ctermfg=186
-" hi StatusLineNC    ctermbg=235	 ctermfg=108
+nnoremap <F5> :GundoToggle<CR>
 
 " Enable man-page reading via the :Man command
 runtime ftplugin/man.vim
@@ -211,7 +241,7 @@ set listchars=tab:›\ ,trail:·
 set tabstop=4
 set shiftwidth=4
 set shiftround
-set noexpandtab
+set expandtab
 set smarttab
 set noruler
 %retab!
@@ -258,3 +288,106 @@ set foldmethod=indent
 nnoremap <space> za
 vnoremap <space> zf
 
+
+let g:UltiSnipsExpandTrigger = "<c-z>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" The Tab Key (implementation)
+" ============================
+"
+" Allow tab to expand snippets, jump through snippets, cycle through
+" autocompletions and of course insert an actual tab (all in that order). See
+" this for more:
+" http://stackoverflow.com/questions/14896327/ultisnips-and-youcompleteme
+function! TheTabKey()
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res == 0
+    call UltiSnips#JumpForwards()
+    if g:ulti_jump_forwards_res == 0
+       return pumvisible() ? "\<c-n>" : "\<tab>"
+    endif
+  endif
+  return ""
+endfunction
+" Much like the above function but used exclusively in visual mode. The reason
+" for this is that Vim places you in visual mode when you are over a portion of
+" a snippet that's meant to be edited. The result is that we must map this to
+" <tab> in visual mode as well as mapping the above function in insert mode
+function! TheVisualTabKey()
+  call UltiSnips#JumpForwards()
+  return (g:ulti_jump_forwards_res == 0) ? "\<tab>" : ""
+endfunction
+
+" Neocomplete config
+
+"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+    "return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+set omnifunc=syntaxcomplete#Complete
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
