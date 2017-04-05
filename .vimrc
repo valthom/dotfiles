@@ -20,11 +20,12 @@ Plugin 'sjl/gundo.vim'
 
 " Other plugins
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround.git'
 "Plugin 'scrooloose/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vimwiki/vimwiki'
-Plugin 'jiangmiao/auto-pairs'
+"Plugin 'jiangmiao/auto-pairs'
 Plugin 'godlygeek/csapprox'
 "Plugin 'editorconfig/editorconfig-vim'
 "Plugin 'vim-scripts/opencl.vim'
@@ -137,6 +138,8 @@ nnoremap <F8> :call ToggleSpellLang()<CR> "
 
 nnoremap <Tab> :bnext <CR>
 nnoremap <S-Tab> :bprevious <CR>
+
+cmap w!! w !sudo tee % > /dev/null
 
 " nnoremap j gj
 " nnoremap k gk

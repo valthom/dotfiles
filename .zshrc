@@ -11,7 +11,7 @@ fi
 TERM=xterm-256color
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/opt/anaconda/bin
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -28,7 +28,10 @@ export EDITOR='vim'
 export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/id_rsa"
+#
+# For backward kill: add some more word delimiters
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -37,13 +40,21 @@ export ARCHFLAGS="-arch x86_64"
 #
 # Example aliases
 alias zshconfig="vim ~/.zshrc"
-alias ls="ls -FS --color="auto""
+alias ls='ls -FS --color="auto"'
 alias cl="clear"
 alias rg="ranger"
 alias cs="clear && ls"
 alias syu='sudo pacman -Syu'
 alias py_up="pip-review --local --interactive"
 #alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ranger='ranger --choosedir=$HOME/rangerdir; LASTDIR=`cat $HOME/rangerdir`; cd "$LASTDIR"'
+#alias ranger='ranger --choosedir=$HOME/rangerdir; LASTDIR=`cat $HOME/rangerdir`; cd "$LASTDIR"'
 alias weather='curl wttr.in/Lausanne'
 bindkey -e
+alias ssh_tunnel='ssh -L 2221:iccluster057.iccluster.epfl.ch:22 tremplin.epfl.ch -l 277066'
+alias ssh_connect='ssh -Y -p 2221 localhost -l vthomas'
+
+#ssh -L 16006:127.0.0.1:6006 olivier@my_server_i
+printmila(){
+    cat $1 | ssh thomasva@elisa1.iro.umontreal.ca "lp -d hpc3256"
+}
+
