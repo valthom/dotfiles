@@ -52,6 +52,14 @@ alias weather='curl wttr.in/Lausanne'
 bindkey -e
 alias ssh_tunnel='ssh -L 2221:iccluster057.iccluster.epfl.ch:22 tremplin.epfl.ch -l 277066'
 alias ssh_connect='ssh -Y -p 2221 localhost -l vthomas'
+alias a='fasd -a'        # any
+alias s='fasd -si'       # show / search / select
+alias d='fasd -d'        # directory
+alias f='fasd -f'        # file
+alias sd='fasd -sid'     # interactive directory selection
+alias sf='fasd -sif'     # interactive file selection
+alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i' # cd with interactive selection
 
 #ssh -L 16006:127.0.0.1:6006 olivier@my_server_i
 printmila(){
