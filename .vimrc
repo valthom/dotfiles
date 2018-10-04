@@ -17,21 +17,23 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'sjl/gundo.vim'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
 
 " Other plugins
-Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround.git'
 "Plugin 'scrooloose/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'kien/ctrlp.vim'
-Plugin 'vimwiki/vimwiki'
+"Plugin 'vimwiki/vimwiki'
 "Plugin 'jiangmiao/auto-pairs'
 Plugin 'godlygeek/csapprox'
 "Plugin 'editorconfig/editorconfig-vim'
 "Plugin 'vim-scripts/opencl.vim'
 "Plugin 'kchmck/vim-coffee-script'
 "Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
+"Plugin 'plasticboy/vim-markdown'
 "Plugin 'tpope/vim-vinegar'
 "
 " Vim bar theme
@@ -54,9 +56,9 @@ Plugin 'Lokaltog/vim-distinguished'
 " Plugin 'tomasr/molokai'
 
 "Plugin 'Valloric/YouCompleteMe'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'octol/vim-cpp-enhanced-highlight'
+"Plugin 'Shougo/neocomplete.vim'
+"Plugin 'scrooloose/nerdtree'
+"Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'lervag/vimtex'
 " Plugin 'vim-scripts/auctex.vim'
 "Plugin 'flazz/vim-colorschemes'
@@ -75,10 +77,10 @@ Plugin 'wellle/targets.vim' "add various text objects \", (, ', $ in commands
 " " Optional:
 " Plugin 'honza/vim-snippets'
 " Track the engine.
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
+"Plugin 'honza/vim-snippets'
 
 
 call vundle#end()            " required
@@ -87,6 +89,11 @@ call vundle#end()            " required
 " Apply YCM FixIt
 "map <F9> :YcmCompleter FixIt<CR>
 "let g:ycm_auto_trigger = 1
+let g:jedi#popup_on_dot = 0
+"let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabDefaultCompletionType = '<C-@>'
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+set omnifunc=syntaxcomplete#Complete
 
 " General editor options
 set modeline
@@ -136,16 +143,16 @@ nnoremap <F7> :setlocal spell!<CR> " toggle
 nnoremap <F8> :call ToggleSpellLang()<CR> "
 "toggle language
 
-nnoremap <Tab> :bnext <CR>
-nnoremap <S-Tab> :bprevious <CR>
+nnoremap <C-n> :bnext <CR>
+nnoremap <C-p> :bprevious <CR>
+imap <C-e> <C-o>$
+imap <C-a> <C-o>0
 
 cmap w!! w !sudo tee % > /dev/null
 
 " nnoremap j gj
 " nnoremap k gk
 
-imap jk <Esc>
-nnoremap gb :ls<CR>:b<Space>
 
 
 
@@ -186,31 +193,12 @@ let g:airline#extensions#tabline#enabled = 1
 
 " I like these colours for the status bar rather than the zenburn ones. They
 " are just the default but with fg and bg reversed.
-nnoremap <F5> :GundoToggle<CR>
+"nnoremap <F5> :GundoToggle<CR>
 
 " Enable man-page reading via the :Man command
 runtime ftplugin/man.vim
 
-" Re-generate omni-complete ctags file via CRTL-F12
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-
-" If we're using the DoxygenToolkit plugin, set the comment style to be C++ style.
-let g:DoxygenToolkit_commentType="C++"
-
-" Enable enhanced syntax highlighting for doxygen.
-let g:load_doxygen_syntax=1
-
-" For C++ files, add Doxygen-style comments to the accepted styles
-autocmd Filetype c,cpp set comments^=:///
-
-" I never write common LISP but quite often write OpenCL kernels :)
-autocmd BufRead,BufNewFile *.cl set filetype=opencl
-autocmd BufRead,BufNewFile *.cl set cindent
-
-" With fugitive, auto-delete buffers when we move out of them and show the
-" current git branch name in the status line.
-autocmd BufReadPost fugitive://* set bufhidden=delete
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+"set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 " Starting with Vim 7, the filetype of empty .tex files defaults to
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
@@ -227,8 +215,6 @@ set exrc
 " let g:clang_library_path="/usr/lib/llvm-3.2/lib/"
 
 " Use F12 to toggle filesystem tree on and off
-nmap <F12> :NERDTreeToggle<CR>
-
 " HACK to make .md mean markdown and not modula2
 autocmd BufWinEnter *.{md,mkd,mkdn,mark*} silent setf markdown
 
@@ -259,17 +245,17 @@ set wildignore+=*.egg,*.egg-info,*.pyc,*.pdf,*.log,*.aux,*.out,*.dvi " Python an
 
 " Specify that we store swap files inside ~/.vim.
 " TODO: make this portable to non-Unix systems
-set directory=$HOME/.vim/tmp//
+"set directory=$HOME/.vim/tmp//
+set noswapfile
 
-" Make pylint slightly less spammy
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_pylint_args = "--disable invalid-name,missing-docstring,fixme"
 
-" Support using jsxhit rather than jshint with syntasic
-autocmd BufRead,BufNewFile *.jsx let g:syntastic_javascript_checkers = ['jsxhint']
 
+let mapleader = " "
+nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>s :w<CR>
 " Load leader key commands
-source $HOME/.vim/leaders.vim
+" source $HOME/.vim/leaders.vim
 
 " Highlight column 1 after textwidth
 set textwidth=80
@@ -281,8 +267,8 @@ hi ColorColumn guibg=#262626 ctermbg=235
 " Don't start with any folds
 set foldlevelstart=99
 
-" Specific autocmds
-source $HOME/.vim/autocmds.vim
+" Specific autocmd
+" source $HOME/.vim/autocmds.vim
 
 " vim:sw=2:sts=2:et
 
@@ -291,106 +277,13 @@ set foldmethod=indent
 nnoremap <space> za
 vnoremap <space> zf
 
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-O> o<esc>
+nnoremap ss i<Space><esc>
+imap jj <esc>
+nnoremap gb :ls<CR>:b<Space>
 
-let g:UltiSnipsExpandTrigger = "<c-z>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-" The Tab Key (implementation)
-" ============================
-"
-" Allow tab to expand snippets, jump through snippets, cycle through
-" autocompletions and of course insert an actual tab (all in that order). See
-" this for more:
-" http://stackoverflow.com/questions/14896327/ultisnips-and-youcompleteme
-function! TheTabKey()
-  call UltiSnips#ExpandSnippet()
-  if g:ulti_expand_res == 0
-    call UltiSnips#JumpForwards()
-    if g:ulti_jump_forwards_res == 0
-       return pumvisible() ? "\<c-n>" : "\<tab>"
-    endif
-  endif
-  return ""
-endfunction
-" Much like the above function but used exclusively in visual mode. The reason
-" for this is that Vim places you in visual mode when you are over a portion of
-" a snippet that's meant to be edited. The result is that we must map this to
-" <tab> in visual mode as well as mapping the above function in insert mode
-function! TheVisualTabKey()
-  call UltiSnips#JumpForwards()
-  return (g:ulti_jump_forwards_res == 0) ? "\<tab>" : ""
-endfunction
-
-" Neocomplete config
-
-"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    "return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-set omnifunc=syntaxcomplete#Complete
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
