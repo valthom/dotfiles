@@ -168,12 +168,6 @@ let python_highlight_all=1
 "colorscheme solarized
 set background=dark
 syntax on
-" hi StatusLine    guibg=#313633 guifg=#ccdc90
-" hi StatusLineNC    guibg=#2e3330 guifg=#88b090
-" hi StatusLine    ctermbg=236   ctermfg=186
-" hi StatusLineNC    ctermbg=235     ctermfg=108
-" colorscheme Tomorrow-Night-Bright
-" colorscheme Tomorrow-Night-Eighties
 colorscheme gruvbox
 "highlight Special ctermfg=Black
 "highlight nonText ctermfg=White
@@ -274,8 +268,8 @@ set foldlevelstart=99
 
 set cursorline
 set foldmethod=indent
-nnoremap <space> za
-vnoremap <space> zf
+" nnoremap <space> za
+" vnoremap <space> zf
 
 "split navigations
 nnoremap <C-J> <C-W><C-J>
