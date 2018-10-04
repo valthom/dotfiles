@@ -25,7 +25,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround.git'
 "Plugin 'scrooloose/syntastic'
 Plugin 'nvie/vim-flake8'
-Plugin 'kien/ctrlp.vim'
+"Plugin 'kien/ctrlp.vim'
 "Plugin 'vimwiki/vimwiki'
 "Plugin 'jiangmiao/auto-pairs'
 Plugin 'godlygeek/csapprox'
@@ -231,7 +231,7 @@ set noruler
 
 
 " Ignore VCS directories and virtual environments
-let g:ctrlp_custom_ignore = '\v[\/](\.(git|hg|svn)|node_modules|bower_components|venv[23]?)$'
+"let g:ctrlp_custom_ignore = '\v[\/](\.(git|hg|svn)|node_modules|bower_components|venv[23]?)$'
 
 " Some files we definitely do not want to complete when matching files or
 " directories
